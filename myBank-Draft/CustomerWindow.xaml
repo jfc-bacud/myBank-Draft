@@ -10,8 +10,12 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="1" Width="5" Background="#222b34"/>
+
         </Grid>
     </Border>
 </Window>

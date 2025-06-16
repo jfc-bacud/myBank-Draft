@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="MyBank" Class="databaseDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=CCL2-20;Initial Catalog=MyBank;Persist Security Info=True;User ID=sa;Trust Server Certificate=True" SettingsObjectName="myBank_Draft.Properties.Settings" SettingsPropertyName="MyBankConnectionString" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.Admin" Member="Admins">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=CCL2-23\MSSQLSERVER01;Initial Catalog=MyBank;Persist Security Info=True;User ID=sa;Trust Server Certificate=True" SettingsObjectName="myBank_Draft.Properties.Settings" SettingsPropertyName="MyBankConnectionString1" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Admins" Member="Admins">
     <Type Name="Admin">
       <Column Name="Admin_ID" Type="System.String" DbType="NVarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Users_ID" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
@@ -36,6 +36,14 @@
       <Column Name="Role_ID" Type="System.String" DbType="NVarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Role_Desc" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Association Name="Role_User" Member="Users" ThisKey="Role_ID" OtherKey="Role_ID" Type="User" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Transaction_Log" Member="Transaction_Logs">
+    <Type Name="Transaction_Log">
+      <Column Name="Log_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Transactions_ID" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="Users_ID" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="Logged_At" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.Transactions" Member="Transactions">

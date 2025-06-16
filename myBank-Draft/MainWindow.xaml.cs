@@ -21,28 +21,19 @@ namespace myBank_Draft
     public partial class MainWindow : Window
     {
         databaseDataContext db = new databaseDataContext(Properties.Settings.Default.MyBankConnectionString);
-        IQueryable<Customer> customers;
-        IQueryable<Admin> admins;
         string role;
 
         public MainWindow()
         {
-            InitializeComponent();  
+            InitializeComponent();
         }
-
-        public void LoadDatabase()
-        {
-            customers = db.Customers;
-            admins = db.Admins;
-        }
-
-
 
         private void loginBTN_Click(object sender, RoutedEventArgs e)
         {
             if (String.IsNullOrEmpty(userIN.Text) || String.IsNullOrEmpty(passIN.Password))
             {
-                // Error status
+                MessageBox.Show("Error 1");
+                return;
             }
 
             if (UserExists(out role))
@@ -51,14 +42,21 @@ namespace myBank_Draft
                 {
                     OpenWindow(role);
                 }
+
+                MessageBox.Show("Error 3");
             }
+
+            MessageBox.Show("Error 2");
         }
 
         private bool UserExists(out string role)
         {
+            var customers = db.Customers.ToList();
+            var admins = db.Admins.ToList();
+
             foreach (var c in customers)
             {
-                if (c.Customer_Email == userIN.Text)
+                if (c.Customer_Email == userIN.Text.ToString())
                 {
                     role = "Customer";
                     return true;
@@ -67,7 +65,7 @@ namespace myBank_Draft
 
             foreach (var a in admins)
             {
-                if (a.Admin_Email == userIN.Text)
+                if (a.Admin_Email == userIN.Text.ToString())
                 {
                     role = "Admin";
                     return true;
@@ -79,32 +77,34 @@ namespace myBank_Draft
         }
         private bool VerifiedPassword(string role)
         {
-            if (role == "Customer")
+            using (var db = new databaseDataContext())
             {
-                var user = (from c in customers
-                           where c.Customer_Email == userIN.Text
-                           select c).FirstOrDefault();
-
-                if (user.Customer_Password == passIN.Password)
+                if (role == "Customer")
                 {
-                    return true;
-                }
-            }
-            else if (role == "Admin")
-            {
-                var user = (from a in admins
-                            where a.Admin_Email == userIN.Text
-                            select a).FirstOrDefault();
+                    var user = (from c in db.Customers
+                                where c.Customer_Email == userIN.Text
+                                select c).FirstOrDefault();
 
-                if (user.Admin_Password == passIN.Password)
+                    if (user.Customer_Password == passIN.Password)
+                    {
+                        return true;
+                    }
+                }
+                else if (role == "Admin")
                 {
-                    return true;
-                }
-            }
+                    var user = (from a in db.Admins
+                                where a.Admin_Email == userIN.Text
+                                select a).FirstOrDefault();
 
-            return false;
+                    if (user.Admin_Password == passIN.Password)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
         }
-
         private void OpenWindow(string role)
         {
             if (role == "Customer")
@@ -119,6 +119,6 @@ namespace myBank_Draft
                 adminWindow.Show();
                 this.Close();
             }
-        }
+        }       
     }
 }

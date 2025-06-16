@@ -42,6 +42,9 @@ namespace myBank_Draft
     partial void InsertRole(Role instance);
     partial void UpdateRole(Role instance);
     partial void DeleteRole(Role instance);
+    partial void InsertTransaction_Log(Transaction_Log instance);
+    partial void UpdateTransaction_Log(Transaction_Log instance);
+    partial void DeleteTransaction_Log(Transaction_Log instance);
     partial void InsertTransaction(Transaction instance);
     partial void UpdateTransaction(Transaction instance);
     partial void DeleteTransaction(Transaction instance);
@@ -54,7 +57,7 @@ namespace myBank_Draft
     #endregion
 		
 		public databaseDataContext() : 
-				base(global::myBank_Draft.Properties.Settings.Default.MyBankConnectionString, mappingSource)
+				base(global::myBank_Draft.Properties.Settings.Default.MyBankConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}
@@ -115,6 +118,14 @@ namespace myBank_Draft
 			}
 		}
 		
+		public System.Data.Linq.Table<Transaction_Log> Transaction_Logs
+		{
+			get
+			{
+				return this.GetTable<Transaction_Log>();
+			}
+		}
+		
 		public System.Data.Linq.Table<Transaction> Transactions
 		{
 			get
@@ -140,7 +151,7 @@ namespace myBank_Draft
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Admin")]
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Admins")]
 	public partial class Admin : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -859,6 +870,140 @@ namespace myBank_Draft
 		{
 			this.SendPropertyChanging();
 			entity.Role = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Transaction_Log")]
+	public partial class Transaction_Log : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Log_ID;
+		
+		private string _Transactions_ID;
+		
+		private string _Users_ID;
+		
+		private System.Nullable<System.DateTime> _Logged_At;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnLog_IDChanging(int value);
+    partial void OnLog_IDChanged();
+    partial void OnTransactions_IDChanging(string value);
+    partial void OnTransactions_IDChanged();
+    partial void OnUsers_IDChanging(string value);
+    partial void OnUsers_IDChanged();
+    partial void OnLogged_AtChanging(System.Nullable<System.DateTime> value);
+    partial void OnLogged_AtChanged();
+    #endregion
+		
+		public Transaction_Log()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Log_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Log_ID
+		{
+			get
+			{
+				return this._Log_ID;
+			}
+			set
+			{
+				if ((this._Log_ID != value))
+				{
+					this.OnLog_IDChanging(value);
+					this.SendPropertyChanging();
+					this._Log_ID = value;
+					this.SendPropertyChanged("Log_ID");
+					this.OnLog_IDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Transactions_ID", DbType="NVarChar(20)")]
+		public string Transactions_ID
+		{
+			get
+			{
+				return this._Transactions_ID;
+			}
+			set
+			{
+				if ((this._Transactions_ID != value))
+				{
+					this.OnTransactions_IDChanging(value);
+					this.SendPropertyChanging();
+					this._Transactions_ID = value;
+					this.SendPropertyChanged("Transactions_ID");
+					this.OnTransactions_IDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Users_ID", DbType="NVarChar(20)")]
+		public string Users_ID
+		{
+			get
+			{
+				return this._Users_ID;
+			}
+			set
+			{
+				if ((this._Users_ID != value))
+				{
+					this.OnUsers_IDChanging(value);
+					this.SendPropertyChanging();
+					this._Users_ID = value;
+					this.SendPropertyChanged("Users_ID");
+					this.OnUsers_IDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Logged_At", DbType="DateTime")]
+		public System.Nullable<System.DateTime> Logged_At
+		{
+			get
+			{
+				return this._Logged_At;
+			}
+			set
+			{
+				if ((this._Logged_At != value))
+				{
+					this.OnLogged_AtChanging(value);
+					this.SendPropertyChanging();
+					this._Logged_At = value;
+					this.SendPropertyChanged("Logged_At");
+					this.OnLogged_AtChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 	

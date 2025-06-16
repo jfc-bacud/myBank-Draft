@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:myBank_Draft"
         mc:Ignorable="d"
-        Title="CustomerWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="CustomerWindow" Height="700" Width="1200" WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" Background="Transparent">
+    <Border CornerRadius="20" Background="#12171d" BorderBrush="Black" >
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+        </Grid>
+    </Border>
 </Window>

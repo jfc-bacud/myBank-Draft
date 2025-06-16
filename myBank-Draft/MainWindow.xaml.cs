@@ -21,92 +21,99 @@ namespace myBank_Draft
     public partial class MainWindow : Window
     {
         databaseDataContext db = new databaseDataContext(Properties.Settings.Default.MyBankConnectionString);
+        IQueryable<Customer> customers;
+        IQueryable<Admin> admins;
         string role;
-        private void verifyBTN_Click(object sender, RoutedEventArgs e)
+
+        public MainWindow()
         {
-            if (string.IsNullOrWhiteSpace(passwordTB.Text) || string.IsNullOrEmpty(userTB.Text))
+            InitializeComponent();  
+        }
+
+        public void LoadDatabase()
+        {
+            customers = db.Customers;
+            admins = db.Admins;
+        }
+
+
+
+        private void loginBTN_Click(object sender, RoutedEventArgs e)
+        {
+            if (String.IsNullOrEmpty(userIN.Text) || String.IsNullOrEmpty(passIN.Password))
             {
-                MessageBox.Show("L");
+                // Error status
             }
 
             if (UserExists(out role))
             {
-                if (VerifyPassword(role))
+                if (VerifiedPassword(role))
                 {
                     OpenWindow(role);
                 }
             }
-
-
         }
-        bool UserExists(out string role)
+
+        private bool UserExists(out string role)
         {
-            var customerList = from c in db.Customers
-                               select c;
-
-            var adminList = from a in db.Admins
-                            select a;
-
-            foreach (var c in customerList)
+            foreach (var c in customers)
             {
-                if (userTB.Text == c.Customer_Email)
+                if (c.Customer_Email == userIN.Text)
                 {
-                    role = "customer";
+                    role = "Customer";
                     return true;
                 }
             }
 
-            foreach (var a in adminList)
+            foreach (var a in admins)
             {
-                if (userTB.Text == a.Admin_Email)
+                if (a.Admin_Email == userIN.Text)
                 {
-                    role = "admin";
+                    role = "Admin";
                     return true;
                 }
             }
 
-            MessageBox.Show("X");
-
-            role = "";
+            role = null;
             return false;
         }
-        bool VerifyPassword(string role)
+        private bool VerifiedPassword(string role)
         {
-            if (role == "customer")
+            if (role == "Customer")
             {
-                var customer = (from c in db.Customers
-                               where c.Customer_Email == userTB.Text
-                               select c).FirstOrDefault();
+                var user = (from c in customers
+                           where c.Customer_Email == userIN.Text
+                           select c).FirstOrDefault();
 
-                if (customer.Customer_Password == passwordTB.Text)
+                if (user.Customer_Password == passIN.Password)
                 {
                     return true;
                 }
             }
-            else if (role == "admin")
+            else if (role == "Admin")
             {
-                var admin = (from a in db.Admins
-                             where a.Admin_Email == userTB.Text
-                             select a).FirstOrDefault();
+                var user = (from a in admins
+                            where a.Admin_Email == userIN.Text
+                            select a).FirstOrDefault();
 
-                if (admin.Admin_Password == passwordTB.Text)
+                if (user.Admin_Password == passIN.Password)
                 {
                     return true;
                 }
             }
 
-            MessageBox.Show("Y");
             return false;
         }
-        void OpenWindow(string role)
+
+        private void OpenWindow(string role)
         {
-            if (role == "customer")
+            if (role == "Customer")
             {
                 CustomerWindow customerWindow = new CustomerWindow();
                 customerWindow.Show();
                 this.Close();
             }
-            else if(role == "admin")
+            else if (role == "Admin")
             {
                 AdminWindow adminWindow = new AdminWindow();
                 adminWindow.Show();
